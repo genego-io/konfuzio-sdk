@@ -231,19 +231,15 @@ class TestOfflineDataSetup(unittest.TestCase):
 
     def test_create_document_with_pages(self):
         """Add new annotation set to a document."""
-        page_list = [{
-            "id": 1,
-            "image": "/page/show-image/1/",
-            "number": 1,
-            "original_size": [
-                595.2,
-                841.68
-            ],
-            "size": [
-                1414,
-                2000
-            ]
-        }]
+        page_list = [
+            {
+                "id": 1,
+                "image": "/page/show-image/1/",
+                "number": 1,
+                "original_size": [595.2, 841.68],
+                "size": [1414, 2000],
+            }
+        ]
         document = Document(project=self.project, category=self.category, pages=page_list)
         assert document.pages == page_list
 
@@ -359,6 +355,28 @@ class TestOfflineDataSetup(unittest.TestCase):
         assert project.virtual_documents == []
         assert project.documents == []
         assert project.test_documents == []
+
+    def test_document_lose_weight(self):
+        """Test lose weight should remove session from Document."""
+        project = Project(id_=None)
+        category = Category(project=project, id_=None)
+        document = Document(project=project, category=category)
+        document.lose_weight()
+        assert document.session is None
+
+    def test_document_lose_weight_with_label(self):
+        """Test lose weight should remove session and Annotations of specified Label from Document."""
+        project = Project(id_=None)
+        category = Category(project=project, id_=None)
+        project.add_category(category)
+        label_set = LabelSet(project=project, categories=[category])
+        label = Label(project=project, label_sets=[label_set])
+        project.add_label_set(label_set)
+        document = Document(project=project, category=category, text="example test")
+        span = Span(start_offset=1, end_offset=2)
+        _ = Annotation(document=document, spans=[span], label=label, label_set=label_set, is_correct=True)
+        document.lose_weight(label=label)
+        assert document.annotations(label=label) == []
 
 
 class TestSeparateLabels(unittest.TestCase):

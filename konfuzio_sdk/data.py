@@ -1755,6 +1755,23 @@ class Document(Data):
 
         return self._annotations
 
+    def lose_weight(self, label: Union[Label, None] = None):
+        """
+        Delete data of the instance.
+
+        If a Label is passed, the Annotations for that Label are also removed.
+
+        :param label: Label for which the Annotations are removed
+        """
+        super().lose_weight()
+
+        if label:
+            label_annotations = self.annotations(label=label)
+            remaining_annotations = list(set(self.annotations()) - set(label_annotations))
+            self._annotations = remaining_annotations
+
+        return self
+
 
 class Project(Data):
     """Access the information of a Project."""
