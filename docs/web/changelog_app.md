@@ -33,6 +33,7 @@ You can think of the *Planned* section as a *Roadmap* that lists Konfuzio Server
 
 <!---
 ### Fixed
+- Some failure emails where not being sent out correctly when AI training finished unsuccessfully. ([Internal Ticket](https://git.konfuzio.com/konfuzio/objectives/-/issues/9937))
 - A bug when training with character detection mode, which was tokenizing some labels incorrectly, causing them to be skipped during extraction ([Internal Ticket](https://git.konfuzio.com/konfuzio/objectives/-/issues/9666))
 - A bug during the extraction post-processing steps, which was causing the first line items of each page to be skipped ([Internal Ticket](https://git.konfuzio.com/konfuzio/objectives/-/issues/9561))
 -->
